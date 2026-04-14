@@ -62,13 +62,13 @@ export default function PartUpload({ onPartAnalyzed }) {
       const imagePayload = validImages.map(img => ({ data: img.base64Data, mediaType: img.mediaType || "image/png" }));
       const result = await analyzePart({ images: imagePayload, description });
       clearInterval(interval);
-      setAgentMessages(prev => [...prev, "â Part analysis complete!"]);
+      setAgentMessages(prev => [...prev, "\u2705 Part analysis complete!"]);
       setAnalysis(result.analysis);
       setEditedSpecs(result.analysis);
     } catch (err) {
       clearInterval(interval);
       setError(err.message);
-      setAgentMessages(prev => [...prev, `â Error: ${err.message}`]);
+      setAgentMessages(prev => [...prev, `\u274C Error: ${err.message}`]);
     } finally {
       setAnalyzing(false);
     }
@@ -98,7 +98,7 @@ export default function PartUpload({ onPartAnalyzed }) {
   return (
     <div className="p-6 max-w-5xl">
       <h2 className="text-2xl font-bold text-gray-900 mb-1">New Part Analysis</h2>
-      <p className="text-gray-500 text-sm mb-6">Upload images and describe your part â AI will identify specs and requirements</p>
+      <p className="text-gray-500 text-sm mb-6">Upload images and describe your part &mdash; AI will identify specs and requirements</p>
 
       {/* Step 1: Upload */}
       <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm mb-6">
@@ -156,8 +156,8 @@ export default function PartUpload({ onPartAnalyzed }) {
       {agentMessages.length > 0 && (
         <div className="bg-gray-900 rounded-xl p-5 font-mono text-sm space-y-1.5 max-h-64 overflow-y-auto mb-6">
           {agentMessages.map((msg, i) => (
-            <div key={i} className={`${msg.startsWith("â") ? "text-green-400" : msg.startsWith("â") ? "text-red-400" : "text-gray-300"}`}>
-              <span className="text-gray-500 mr-2">â</span>{msg}
+            <div key={i} className={`${(msg || "").startsWith("\u2705") ? "text-green-400" : (msg || "").startsWith("\u274C") ? "text-red-400" : "text-gray-300"}`}>
+              <span className="text-gray-500 mr-2">{"\u2192"}</span>{msg}
             </div>
           ))}
           {analyzing && <div className="text-blue-400 animate-pulse flex items-center gap-2"><Loader2 size={14} className="animate-spin" />Processing...</div>}
