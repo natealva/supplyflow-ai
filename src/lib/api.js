@@ -1,6 +1,20 @@
 // API helper for calling Vercel serverless functions
 const API_BASE = "/api";
 
+async function safeParseError(res, fallbackMsg) {
+  try {
+    const data = await res.json();
+    return data.error || fallbackMsg;
+  } catch {
+    try {
+      const text = await res.text();
+      return text.slice(0, 200) || fallbackMsg;
+    } catch {
+      return fallbackMsg;
+    }
+  }
+}
+
 export async function analyzePart({ images, description }) {
   const res = await fetch(`${API_BASE}/analyze-part`, {
     method: "POST",
@@ -8,8 +22,8 @@ export async function analyzePart({ images, description }) {
     body: JSON.stringify({ images, description }),
   });
   if (!res.ok) {
-    const err = await res.json();
-    throw new Error(err.error || "Failed to analyze part");
+    const msg = await safeParseError(res, "Failed to analyze part");
+    throw new Error(msg);
   }
   return res.json();
 }
@@ -21,8 +35,8 @@ export async function extractQuote({ pdfBase64, partSpecs }) {
     body: JSON.stringify({ pdfBase64, partSpecs }),
   });
   if (!res.ok) {
-    const err = await res.json();
-    throw new Error(err.error || "Failed to extract quote");
+    const msg = await safeParseError(res, "Failed to extract quote");
+    throw new Error(msg);
   }
   return res.json();
 }
@@ -34,8 +48,8 @@ export async function generateMockQuotes({ partSpecs, numSuppliers = 4 }) {
     body: JSON.stringify({ partSpecs, numSuppliers }),
   });
   if (!res.ok) {
-    const err = await res.json();
-    throw new Error(err.error || "Failed to generate mock quotes");
+    const msg = await safeParseError(res, "Failed to generate mock quotes");
+    throw new Error(msg);
   }
   return res.json();
 }
