@@ -28,6 +28,13 @@ export default function PartUpload({ onPartAnalyzed }) {
   };
 
   const runAnalysis = async () => {
+    // Validate images have base64 data before sending
+    const validImages = images.filter(img => img.base64Data && img.base64Data.length > 0);
+    if (validImages.length === 0 && images.length > 0) {
+      setError("Image data could not be read. Please re-upload your images.");
+      return;
+    }
+
     setAnalyzing(true);
     setError(null);
     setAgentMessages([]);
@@ -52,16 +59,16 @@ export default function PartUpload({ onPartAnalyzed }) {
     }, 800);
 
     try {
-      const imagePayload = images.map(img => ({ data: img.base64Data, mediaType: img.mediaType }));
+      const imagePayload = validImages.map(img => ({ data: img.base64Data, mediaType: img.mediaType || "image/png" }));
       const result = await analyzePart({ images: imagePayload, description });
       clearInterval(interval);
-      setAgentMessages(prev => [...prev, "✅ Part analysis complete!"]);
+      setAgentMessages(prev => [...prev, "â Part analysis complete!"]);
       setAnalysis(result.analysis);
       setEditedSpecs(result.analysis);
     } catch (err) {
       clearInterval(interval);
       setError(err.message);
-      setAgentMessages(prev => [...prev, `❌ Error: ${err.message}`]);
+      setAgentMessages(prev => [...prev, `â Error: ${err.message}`]);
     } finally {
       setAnalyzing(false);
     }
@@ -91,7 +98,7 @@ export default function PartUpload({ onPartAnalyzed }) {
   return (
     <div className="p-6 max-w-5xl">
       <h2 className="text-2xl font-bold text-gray-900 mb-1">New Part Analysis</h2>
-      <p className="text-gray-500 text-sm mb-6">Upload images and describe your part — AI will identify specs and requirements</p>
+      <p className="text-gray-500 text-sm mb-6">Upload images and describe your part â AI will identify specs and requirements</p>
 
       {/* Step 1: Upload */}
       <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm mb-6">
@@ -149,8 +156,8 @@ export default function PartUpload({ onPartAnalyzed }) {
       {agentMessages.length > 0 && (
         <div className="bg-gray-900 rounded-xl p-5 font-mono text-sm space-y-1.5 max-h-64 overflow-y-auto mb-6">
           {agentMessages.map((msg, i) => (
-            <div key={i} className={`${msg.startsWith("✅") ? "text-green-400" : msg.startsWith("❌") ? "text-red-400" : "text-gray-300"}`}>
-              <span className="text-gray-500 mr-2">→</span>{msg}
+            <div key={i} className={`${msg.startsWith("â") ? "text-green-400" : msg.startsWith("â") ? "text-red-400" : "text-gray-300"}`}>
+              <span className="text-gray-500 mr-2">â</span>{msg}
             </div>
           ))}
           {analyzing && <div className="text-blue-400 animate-pulse flex items-center gap-2"><Loader2 size={14} className="animate-spin" />Processing...</div>}
@@ -186,7 +193,7 @@ export default function PartUpload({ onPartAnalyzed }) {
             <SpecField label="Attachment Method" value={editedSpecs.attachmentMethod} onChange={v => updateSpec("attachmentMethod", v)} />
             <SpecField label="NVH Requirement" value={editedSpecs.nvhRequirement} onChange={v => updateSpec("nvhRequirement", v)} />
             <SpecField label="Est. Annual Volume" value={editedSpecs.estimatedAnnualVolume} onChange={v => updateSpec("estimatedAnnualVolume", v)} type="number" />
-            <SpecField label="Est. Volume (cm³)" value={editedSpecs.estimatedVolume_cm3} onChange={v => updateSpec("estimatedVolume_cm3", v)} type="number" />
+            <SpecField label="Est. Volume (cmÂ³)" value={editedSpecs.estimatedVolume_cm3} onChange={v => updateSpec("estimatedVolume_cm3", v)} type="number" />
           </div>
 
           <div className="border-t border-gray-100 mt-5 pt-5">
