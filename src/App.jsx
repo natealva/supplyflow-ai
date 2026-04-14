@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Upload, FileText, LayoutDashboard, Zap, Brain, BarChart3, ChevronRight, CheckCircle, Package } from "lucide-react";
+import ErrorBoundary from "./components/ErrorBoundary";
 import PartUpload from "./pages/PartUpload";
 import RFQBuilder from "./pages/RFQBuilder";
 import QuoteCollection from "./pages/QuoteCollection";
@@ -104,30 +105,32 @@ export default function App() {
 
       {/* Main Content */}
       <main className="flex-1 overflow-y-auto">
-        {currentStep === "upload" && (
-          <PartUpload onPartAnalyzed={handlePartAnalyzed} />
-        )}
-        {currentStep === "rfq" && (
-          <RFQBuilder
-            partData={partData}
-            onProceedToQuotes={handleRFQReady}
-            onBack={() => setCurrentStep("upload")}
-          />
-        )}
-        {currentStep === "quotes" && (
-          <QuoteCollection
-            rfqPackage={rfqPackage}
-            onProceedToComparison={handleQuotesReady}
-            onBack={() => setCurrentStep("rfq")}
-          />
-        )}
-        {currentStep === "compare" && (
-          <QuoteComparison
-            quotes={collectedQuotes}
-            rfqPackage={rfqPackage}
-            onBack={() => setCurrentStep("quotes")}
-          />
-        )}
+        <ErrorBoundary>
+          {currentStep === "upload" && (
+            <PartUpload onPartAnalyzed={handlePartAnalyzed} />
+          )}
+          {currentStep === "rfq" && (
+            <RFQBuilder
+              partData={partData}
+              onProceedToQuotes={handleRFQReady}
+              onBack={() => setCurrentStep("upload")}
+            />
+          )}
+          {currentStep === "quotes" && (
+            <QuoteCollection
+              rfqPackage={rfqPackage}
+              onProceedToComparison={handleQuotesReady}
+              onBack={() => setCurrentStep("rfq")}
+            />
+          )}
+          {currentStep === "compare" && (
+            <QuoteComparison
+              quotes={collectedQuotes}
+              rfqPackage={rfqPackage}
+              onBack={() => setCurrentStep("quotes")}
+            />
+          )}
+        </ErrorBoundary>
       </main>
     </div>
   );
