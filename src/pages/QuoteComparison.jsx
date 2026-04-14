@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, Fragment } from "react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from "recharts";
 import { Brain, Trophy, ArrowLeft, AlertTriangle, CheckCircle, TrendingUp, DollarSign, Clock, Shield, ChevronDown, ChevronUp } from "lucide-react";
 
@@ -157,8 +157,8 @@ export default function QuoteComparison({ quotes, rfqPackage, onBack }) {
             </thead>
             <tbody>
               {scored.map((q, i) => (
-                <>
-                  <tr key={i} className={`border-b border-gray-50 cursor-pointer transition-colors ${i === 0 ? "bg-green-50" : "hover:bg-gray-50"}`}
+                <Fragment key={i}>
+                  <tr className={`border-b border-gray-50 cursor-pointer transition-colors ${i === 0 ? "bg-green-50" : "hover:bg-gray-50"}`}
                     onClick={() => setExpandedQuote(expandedQuote === i ? null : i)}>
                     <td className="px-5 py-4">
                       {i === 0
@@ -188,7 +188,7 @@ export default function QuoteComparison({ quotes, rfqPackage, onBack }) {
                     </td>
                   </tr>
                   {expandedQuote === i && (
-                    <tr key={`${i}-detail`} className="bg-gray-50">
+                    <tr className="bg-gray-50">
                       <td colSpan={11} className="px-8 py-4">
                         <div className="grid grid-cols-4 gap-4 text-sm mb-3">
                           <div><span className="text-gray-400 text-xs block">Material</span><span className="font-medium">{q.materialQuoted || "—"}</span></div>
@@ -217,7 +217,7 @@ export default function QuoteComparison({ quotes, rfqPackage, onBack }) {
                       </td>
                     </tr>
                   )}
-                </>
+                </Fragment>
               ))}
             </tbody>
           </table>
