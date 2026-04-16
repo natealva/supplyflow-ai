@@ -38,9 +38,9 @@ export default function App() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50 font-sans">
+    <div className="flex h-screen bg-gray-50 font-sans overflow-hidden">
       {/* Sidebar */}
-      <nav className="bg-gray-900 text-white w-56 min-h-screen flex flex-col flex-shrink-0">
+      <nav className="bg-gray-900 text-white w-56 h-screen flex flex-col flex-shrink-0">
         <div className="p-5 border-b border-gray-700">
           <h1 className="text-lg font-bold tracking-tight flex items-center gap-2">
             <Zap size={20} className="text-blue-400" />
