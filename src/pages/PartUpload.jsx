@@ -193,7 +193,7 @@ export default function PartUpload({ onPartAnalyzed }) {
             <SpecField label="Attachment Method" value={editedSpecs.attachmentMethod} onChange={v => updateSpec("attachmentMethod", v)} />
             <SpecField label="NVH Requirement" value={editedSpecs.nvhRequirement} onChange={v => updateSpec("nvhRequirement", v)} />
             <SpecField label="Est. Annual Volume" value={editedSpecs.estimatedAnnualVolume} onChange={v => updateSpec("estimatedAnnualVolume", v)} type="number" />
-            <SpecField label="Est. Volume (cmÂ³)" value={editedSpecs.estimatedVolume_cm3} onChange={v => updateSpec("estimatedVolume_cm3", v)} type="number" />
+            <SpecField label="Est. Volume (cm³)" value={editedSpecs.estimatedVolume_cm3} onChange={v => updateSpec("estimatedVolume_cm3", v)} type="number" />
           </div>
 
           <div className="border-t border-gray-100 mt-5 pt-5">
